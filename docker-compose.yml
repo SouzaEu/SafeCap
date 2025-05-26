@@ -1,0 +1,34 @@
+
+version: '3.8'
+
+services:
+  safecap-api:
+    build: .
+    container_name: safecap-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracle-db
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - JWT_SECRET=${JWT_SECRET}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  oracle-db:
+    image: gvenzl/oracle-xe
+    container_name: oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PASSWORD=120206
+      - APP_USER=RM556652
+      - APP_USER_PASSWORD=120206
+    healthcheck:
+      test: ["CMD", "ls"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
