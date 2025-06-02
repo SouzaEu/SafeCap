@@ -1,13 +1,13 @@
-
 package br.com.fiap.safecap.controller;
 
 import br.com.fiap.safecap.dto.UsuarioDTO;
+import br.com.fiap.safecap.dto.TokenResponseDTO;
 import br.com.fiap.safecap.model.Usuario;
 import br.com.fiap.safecap.service.UsuarioService;
 import br.com.fiap.safecap.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.examples.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -36,51 +34,52 @@ public class AuthController {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Operation(summary = "Autentica o usuário e gera o token JWT",
-        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            content = @Content(
-                schema = @Schema(implementation = UsuarioDTO.class),
-                examples = @ExampleObject(
-                    value = "{\n  \"email\": \"admin@fiap.com\",\n  \"senha\": \"123456\"\n}"
-                )
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schema = @Schema(implementation = UsuarioDTO.class),
+                            examples = @ExampleObject(
+                                    value = "{\n  \"email\": \"admin@fiap.com\",\n  \"senha\": \"123456\"\n}"
+                            )
+                    )
             )
-        )
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Token gerado com sucesso"),
-        @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
+            @ApiResponse(responseCode = "200", description = "Token gerado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody UsuarioDTO dto) {
         logger.info("Tentativa de login para: {}", dto.getEmail());
 
         return usuarioService.findByEmail(dto.getEmail())
-            .filter(u -> encoder.matches(dto.getSenha(), u.getSenha()))
-            .map(u -> {
-                logger.info("Login bem-sucedido para {}", u.getEmail());
-                return ResponseEntity.ok(Map.of("token", jwtUtil.generateToken(u.getEmail())));
-            })
-            .orElseGet(() -> {
-                logger.warn("Falha no login para {}", dto.getEmail());
-                return ResponseEntity.status(401).body("Credenciais inválidas");
-            });
+                .filter(u -> encoder.matches(dto.getSenha(), u.getSenha()))
+                .map(u -> {
+                    logger.info("Login bem-sucedido para {}", u.getEmail());
+                    String token = jwtUtil.generateToken(u.getEmail());
+                    return ResponseEntity.ok(new TokenResponseDTO(token));
+                })
+                .orElseGet(() -> {
+                    logger.warn("Falha no login para {}", dto.getEmail());
+                    return ResponseEntity.status(401).build();
+                });
     }
 
     @Operation(summary = "Registra um novo usuário",
-        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            content = @Content(
-                schema = @Schema(implementation = UsuarioDTO.class),
-                examples = @ExampleObject(
-                    value = "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@fiap.com\",\n  \"senha\": \"123456\"\n}"
-                )
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schema = @Schema(implementation = UsuarioDTO.class),
+                            examples = @ExampleObject(
+                                    value = "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@fiap.com\",\n  \"senha\": \"123456\"\n}"
+                            )
+                    )
             )
-        )
     )
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UsuarioDTO dto) {
+    public ResponseEntity<Usuario> register(@Valid @RequestBody UsuarioDTO dto) {
         logger.info("Registrando novo usuário: {}", dto.getEmail());
 
         if (usuarioService.findByEmail(dto.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email já cadastrado");
+            return ResponseEntity.badRequest().body(null);
         }
 
         Usuario usuario = new Usuario();

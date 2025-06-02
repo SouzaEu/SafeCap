@@ -24,9 +24,9 @@ services:
     ports:
       - "1521:1521"
     environment:
-      - ORACLE_PASSWORD=120206
-      - APP_USER=RM556652
-      - APP_USER_PASSWORD=120206
+      - ORACLE_PASSWORD=290305
+      - APP_USER=RM556089
+      - APP_USER_PASSWORD=290305
     healthcheck:
       test: ["CMD", "ls"]
       interval: 30s

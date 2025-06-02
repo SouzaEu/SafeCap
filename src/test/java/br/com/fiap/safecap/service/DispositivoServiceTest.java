@@ -1,4 +1,3 @@
-
 package br.com.fiap.safecap.service;
 
 import br.com.fiap.safecap.exception.BusinessRuleException;
@@ -6,11 +5,10 @@ import br.com.fiap.safecap.model.Dispositivo;
 import br.com.fiap.safecap.repository.DispositivoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class DispositivoServiceTest {
@@ -21,9 +19,7 @@ public class DispositivoServiceTest {
     @BeforeEach
     public void setup() {
         dispositivoRepository = mock(DispositivoRepository.class);
-        dispositivoService = new DispositivoService() {{
-            dispositivoRepository = DispositivoServiceTest.this.dispositivoRepository;
-        }};
+        dispositivoService = new DispositivoService(dispositivoRepository);
     }
 
     @Test

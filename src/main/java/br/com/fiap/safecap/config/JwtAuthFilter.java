@@ -1,4 +1,3 @@
-
 package br.com.fiap.safecap.config;
 
 import br.com.fiap.safecap.util.JwtUtil;
@@ -44,9 +43,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         userEmail = jwtUtil.getEmailFromToken(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var user = usuarioService.findByEmail(userEmail);
+            java.util.Optional<br.com.fiap.safecap.model.Usuario> user = usuarioService.findByEmail(userEmail);
             if (user.isPresent() && jwtUtil.validateToken(jwt)) {
-                var authToken = new UsernamePasswordAuthenticationToken(
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user.get(), null, null
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

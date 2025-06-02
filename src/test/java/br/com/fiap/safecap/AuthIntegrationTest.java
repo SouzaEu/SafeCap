@@ -1,16 +1,18 @@
-
 package br.com.fiap.safecap;
 
 import br.com.fiap.safecap.dto.UsuarioDTO;
+import br.com.fiap.safecap.dto.TokenResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class AuthIntegrationTest {
 
     @LocalServerPort
@@ -18,6 +20,11 @@ public class AuthIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Test
+    void contextLoads() {
+        // Apenas verifica se o contexto Spring sobe corretamente
+    }
 
     @Test
     public void testAuthAndAccessProtectedRoute() throws Exception {
@@ -36,17 +43,17 @@ public class AuthIntegrationTest {
                 .exchange()
                 .expectStatus().isOk();
 
-        var tokenResponse = client.post().uri("/api/auth/login")
+        TokenResponseDTO tokenResponse = client.post().uri("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(objectMapper.writeValueAsString(novoUsuario))
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.token").exists()
-                .returnResult();
+                .expectBody(TokenResponseDTO.class)
+                .returnResult()
+                .getResponseBody();
 
-        String token = new String(tokenResponse.getResponseBody());
-        token = token.replace("{"token":"", "").replace(""}", "");
+        assert tokenResponse != null;
+        String token = tokenResponse.getToken();
 
         client.get().uri("/api/alertas")
                 .header("Authorization", "Bearer " + token)

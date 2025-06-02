@@ -1,4 +1,3 @@
-
 package br.com.fiap.safecap.service;
 
 import br.com.fiap.safecap.model.Alerta;
@@ -6,10 +5,9 @@ import br.com.fiap.safecap.repository.AlertaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,12 +21,7 @@ public class AlertaServiceTest {
     @BeforeEach
     public void setup() {
         alertaRepository = mock(AlertaRepository.class);
-        alertaService = new AlertaService();
-        alertaService = Mockito.spy(alertaService);
-        alertaService = spy(new AlertaService());
-        alertaService = new AlertaService() {{
-            alertaRepository = AlertaServiceTest.this.alertaRepository;
-        }};
+        alertaService = new AlertaService(alertaRepository);
     }
 
     @Test
@@ -43,9 +36,20 @@ public class AlertaServiceTest {
         a2.setUmidade(35.0);
         a2.setTimestamp(LocalDateTime.now());
 
-        when(alertaRepository.findAll()).thenReturn(Arrays.asList(a1, a2));
+        List<Alerta> todosAlertas = List.of(a1, a2);
 
-        Page<Alerta> result = alertaService.findWithFilters(0, 10, 38.0, 30.0);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // Filtro: temperatura > 38.0, umidade < 30.0
+        List<Alerta> filtrados = todosAlertas.stream()
+            .filter(a -> a.getTemperatura() > 38.0 && a.getUmidade() < 30.0)
+            .toList();
+
+        Page<Alerta> page = new PageImpl<>(filtrados, pageable, filtrados.size());
+
+        when(alertaRepository.findAll()).thenReturn(todosAlertas);
+
+        Page<Alerta> result = alertaService.findWithFilters(pageable, 38.0, 30.0);
 
         assertEquals(1, result.getTotalElements());
         assertEquals(39.5, result.getContent().get(0).getTemperatura());
