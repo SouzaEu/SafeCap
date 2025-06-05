@@ -20,19 +20,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.disable())
+            .csrf(csrf -> csrf.disable()) // Desabilitar CSRF (não necessário para APIs REST)
+            .cors(cors -> cors.disable()) // Desabilitar CORS, pois já configurado na classe CorsConfig
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permitir login e Swagger
+                .anyRequest().authenticated() // Requer autenticação para os outros endpoints
             )
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sem gerenciamento de sessão
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Filtra JWT
             .build();
     }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
 }
+    

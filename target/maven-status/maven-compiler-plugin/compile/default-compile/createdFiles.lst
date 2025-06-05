@@ -1,4 +1,3 @@
-br\com\fiap\safecap\config\WebSecurityConfig.class
 br\com\fiap\safecap\exception\BusinessRuleException.class
 br\com\fiap\safecap\service\DispositivoService.class
 br\com\fiap\safecap\dto\TokenResponseDTO.class
