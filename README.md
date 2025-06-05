@@ -65,6 +65,12 @@ Exemplos incluídos nos endpoints de:
 docker-compose up --build
 ```
 
+## 🔓 Testes locais sem JWT
+
+Ao executar com o perfil `dev`, a propriedade `security.disabled` fica ativada e
+todos os endpoints podem ser acessados sem token. Útil para testar via Swagger
+ou Postman em localhost.
+
 ## 📂 Estrutura
 
 - `controller/` — Endpoints
