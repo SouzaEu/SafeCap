@@ -3,13 +3,12 @@ package br.com.fiap.safecap.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 public class WebSecurityConfig {
@@ -17,18 +16,27 @@ public class WebSecurityConfig {
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
 
+    @Value("${security.disabled:false}")
+    private boolean securityDisabled;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-            .csrf(csrf -> csrf.disable()) // Desabilitar CSRF (não necessário para APIs REST)
-            .cors(cors -> cors.disable()) // Desabilitar CORS, pois já configurado na classe CorsConfig
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permitir login e Swagger
-                .anyRequest().authenticated() // Requer autenticação para os outros endpoints
-            )
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sem gerenciamento de sessão
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Filtra JWT
-            .build();
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.disable());
+
+        if (securityDisabled) {
+            http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        } else {
+            http.authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .anyRequest().authenticated()
+                )
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        }
+
+        return http.build();
     }
 }
     
