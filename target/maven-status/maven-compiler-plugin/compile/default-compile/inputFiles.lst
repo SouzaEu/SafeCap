@@ -15,6 +15,7 @@ C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fia
 C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\model\Alerta.java
 C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\config\WebSecurityConfig.java
 C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\exception\JwtExpiredException.java
+C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\util\GenerateJwtKey.java
 C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\controller\DispositivoController.java
 C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\SafeCapApplication.java
 C:\Users\vinis\Desktop\GLOBAL SOLUTION\JAVA\safecap-api\src\main\java\br\com\fiap\safecap\dto\ApiError.java

@@ -50,7 +50,7 @@ API REST em Spring Boot para monitoramento térmico inteligente via IoT. Projeto
 
 Acesse:
 ```
-/swagger-ui.html
+http://localhost:8080/swagger-ui/index.html
 ```
 
 Exemplos incluídos nos endpoints de:
