@@ -1,0 +1,12 @@
+- Link dos repositórios com os códigos fontes
+https://github.com/SouzaEu/SafeCap
+
+- Link dos deploys
+
+- Instruções para acesso e testes
+No readme
+
+- Vídeo demonstração da solução completa (máx 10 minutos)
+
+
+- Vídeo pitch (máx. 3 minutos)
