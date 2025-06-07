@@ -4,10 +4,6 @@ import br.com.fiap.safecap.model.Alerta;
 import br.com.fiap.safecap.repository.AlertaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,22 +20,17 @@ public class AlertaServiceTest {
     }
 
     @Test
-    public void testFindWithFilters() {
+    public void testSave() {
         Alerta alerta = new Alerta();
-        alerta.setTemperatura(39.5);
-        alerta.setUmidade(28.0);
-        alerta.setTimestamp(LocalDateTime.now());
+        alerta.setTitulo("Teste");
+        alerta.setDescricao("Descrição do teste");
 
-        Pageable pageable = PageRequest.of(0, 10);
+        when(alertaRepository.save(any(Alerta.class))).thenReturn(alerta);
 
-        Page<Alerta> page = new PageImpl<>(List.of(alerta), pageable, 1);
+        Alerta saved = alertaService.save(alerta);
 
-        when(alertaRepository.findByFiltros(38.0, 30.0, pageable)).thenReturn(page);
-
-        Page<Alerta> result = alertaService.findWithFilters(pageable, 38.0, 30.0);
-
-        verify(alertaRepository).findByFiltros(38.0, 30.0, pageable);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(39.5, result.getContent().get(0).getTemperatura());
+        verify(alertaRepository).save(alerta);
+        assertEquals("Teste", saved.getTitulo());
+        assertEquals("Descrição do teste", saved.getDescricao());
     }
 }

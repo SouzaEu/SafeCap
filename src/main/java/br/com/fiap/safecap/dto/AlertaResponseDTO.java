@@ -1,33 +1,13 @@
-package br.com.fiap.safecap.model;
+package br.com.fiap.safecap.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "ALERTA")
-public class Alerta extends AuditableEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_ALERTA")
+public class AlertaResponseDTO {
     private Long id;
-
-    @Column(name = "TEMPERATURA")
     private Double temperatura;
-
-    @Column(name = "UMIDADE")
     private Double umidade;
-
-    @Column(name = "TIMESTAMP")
     private LocalDateTime timestamp;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_DISPOSITIVO", nullable = false)
-    private Dispositivo dispositivo;
-
-    @PrePersist
-    protected void onCreate() {
-        timestamp = LocalDateTime.now();
-    }
+    private DispositivoResponseDTO dispositivo;
 
     public Long getId() {
         return id;
@@ -61,11 +41,11 @@ public class Alerta extends AuditableEntity {
         this.timestamp = timestamp;
     }
 
-    public Dispositivo getDispositivo() {
+    public DispositivoResponseDTO getDispositivo() {
         return dispositivo;
     }
 
-    public void setDispositivo(Dispositivo dispositivo) {
+    public void setDispositivo(DispositivoResponseDTO dispositivo) {
         this.dispositivo = dispositivo;
     }
-}
+} 

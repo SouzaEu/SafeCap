@@ -1,4 +1,3 @@
-
 package br.com.fiap.safecap.config;
 
 import org.springframework.context.annotation.Bean;
@@ -29,7 +28,14 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
             http.authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .requestMatchers(
+                        "/api/auth/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**"
+                    ).permitAll()
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

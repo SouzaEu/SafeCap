@@ -1,4 +1,3 @@
-
 package br.com.fiap.safecap.model;
 
 import jakarta.persistence.Column;
@@ -11,13 +10,13 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class AuditableEntity {
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted")
+    @Column(name = "DELETED")
     private boolean deleted = false;
 
     @PrePersist

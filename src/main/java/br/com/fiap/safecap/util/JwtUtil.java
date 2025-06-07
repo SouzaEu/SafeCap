@@ -7,20 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret:${JWT_SECRET:defaultSecretKey}}")
-    private String jwtSecret;
-
+    private final SecretKey signingKey;
     private final int jwtExpirationMs = 86400000;
 
-    private SecretKey getSigningKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
-        return Keys.hmacShaKeyFor(keyBytes);
+    public JwtUtil() {
+        // Gerar uma chave segura de 512 bits para HS512 apenas uma vez
+        this.signingKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
     public String generateToken(String email) {
@@ -28,13 +25,13 @@ public class JwtUtil {
             .setSubject(email)
             .setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-            .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+            .signWith(signingKey, SignatureAlgorithm.HS512)
             .compact();
     }
 
     public String getEmailFromToken(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(getSigningKey())
+            .setSigningKey(signingKey)
             .build()
             .parseClaimsJws(token)
             .getBody()
@@ -44,7 +41,7 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(signingKey)
                 .build()
                 .parseClaimsJws(token);
             return true;

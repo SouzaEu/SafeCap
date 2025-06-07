@@ -1,8 +1,10 @@
 package br.com.fiap.safecap.controller;
 
 import br.com.fiap.safecap.dto.UsuarioDTO;
+import br.com.fiap.safecap.dto.LoginDTO;
 import br.com.fiap.safecap.dto.TokenResponseDTO;
 import br.com.fiap.safecap.model.Usuario;
+import br.com.fiap.safecap.model.Role;
 import br.com.fiap.safecap.service.UsuarioService;
 import br.com.fiap.safecap.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,9 +38,9 @@ public class AuthController {
     @Operation(summary = "Autentica o usuário e gera o token JWT",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            schema = @Schema(implementation = UsuarioDTO.class),
+                            schema = @Schema(implementation = LoginDTO.class),
                             examples = @ExampleObject(
-                                    value = "{\n  \"email\": \"admin@fiap.com\",\n  \"senha\": \"123456\"\n}"
+                                    value = "{\n  \"email\": \"teste@fiap.com\",\n  \"senha\": \"123456\"\n}"
                             )
                     )
             )
@@ -48,7 +50,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     })
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody UsuarioDTO dto) {
+    public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
         logger.info("Tentativa de login para: {}", dto.getEmail());
 
         return usuarioService.findByEmail(dto.getEmail())
@@ -82,7 +84,7 @@ public class AuthController {
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(encoder.encode(dto.getSenha()));
-        usuario.setRole("USER");
+        usuario.setRole(Role.USER);
 
         return ResponseEntity.ok(usuarioService.save(usuario));
     }
