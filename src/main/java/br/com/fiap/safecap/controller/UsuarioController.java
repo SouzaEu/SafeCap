@@ -1,4 +1,3 @@
-
 package br.com.fiap.safecap.controller;
 
 import br.com.fiap.safecap.model.Usuario;
@@ -27,5 +26,12 @@ public class UsuarioController {
         return usuarioService.findById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Exclui um usuário (soft delete)")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        usuarioService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -48,7 +48,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     })
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody UsuarioDTO dto) {
         logger.info("Tentativa de login para: {}", dto.getEmail());
 
         return usuarioService.findByEmail(dto.getEmail())
@@ -77,10 +77,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Usuario> register(@Valid @RequestBody UsuarioDTO dto) {
         logger.info("Registrando novo usuário: {}", dto.getEmail());
-
-        if (usuarioService.findByEmail(dto.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body(null);
-        }
 
         Usuario usuario = new Usuario();
         usuario.setNome(dto.getNome());
