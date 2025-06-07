@@ -2,6 +2,7 @@ package br.com.fiap.safecap.config;
 
 import br.com.fiap.safecap.util.JwtUtil;
 import br.com.fiap.safecap.service.UsuarioService;
+import br.com.fiap.safecap.model.Usuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -43,7 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         userEmail = jwtUtil.getEmailFromToken(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            java.util.Optional<br.com.fiap.safecap.model.Usuario> user = usuarioService.findByEmail(userEmail);
+            Optional<Usuario> user = usuarioService.findByEmail(userEmail);
             if (user.isPresent() && jwtUtil.validateToken(jwt)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user.get(), null, null
