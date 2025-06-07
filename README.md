@@ -61,7 +61,7 @@ Exemplos incluídos nos endpoints de:
 ## 🛠️ Execução com Docker
 
 ```bash
-./mvnw clean package
+mvn clean package
 docker-compose up --build
 ```
 
