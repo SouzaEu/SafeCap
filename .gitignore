@@ -1,0 +1,12 @@
+# Maven target directory
+/target/
+
+# IDE directories and project files
+.idea/
+.vscode/
+*.iml
+
+# Environment variable files
+.env
+.env.*
+!.env.example
