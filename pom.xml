@@ -114,12 +114,15 @@
         </dependency>
     </dependencies>
 
-        <build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
+                <configuration>
+                    <mainClass>br.com.fiap.safecap.SafeCapApplication</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -139,5 +142,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
