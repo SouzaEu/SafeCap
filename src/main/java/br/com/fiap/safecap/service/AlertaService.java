@@ -4,13 +4,11 @@ import br.com.fiap.safecap.model.Alerta;
 import br.com.fiap.safecap.model.Usuario;
 import br.com.fiap.safecap.repository.AlertaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Profile("!nodb")
 @Service
 public class AlertaService {
 
