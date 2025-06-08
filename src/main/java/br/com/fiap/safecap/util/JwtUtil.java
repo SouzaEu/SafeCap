@@ -4,11 +4,13 @@ import br.com.fiap.safecap.exception.JwtExpiredException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Profile("!nodb")
 @Component
 public class JwtUtil {
 
