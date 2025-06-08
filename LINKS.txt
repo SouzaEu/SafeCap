@@ -2,7 +2,7 @@
 https://github.com/SouzaEu/SafeCap
 
 - Link do deploy
-https://safecapgs-2tdspk.onrender.com
+https://safecapgs-2tdspk.onrender.com/swagger-ui/index.html
 
 - Instruções para acesso e testes
 No readme

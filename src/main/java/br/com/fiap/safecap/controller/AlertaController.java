@@ -9,16 +9,20 @@ import br.com.fiap.safecap.model.Usuario;
 import br.com.fiap.safecap.service.AlertaService;
 import br.com.fiap.safecap.service.DispositivoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/alertas")
@@ -49,13 +53,44 @@ public class AlertaController {
     }
 
     @GetMapping
-    @Operation(summary = "Listar alertas", description = "Lista todos os alertas do usuário")
-    public ResponseEntity<List<AlertaResponseDTO>> listar(Authentication authentication) {
+    @Operation(summary = "Listar alertas", description = "Lista todos os alertas do usuário com paginação e filtros")
+    public ResponseEntity<Page<AlertaResponseDTO>> listar(
+            @Parameter(description = "Data inicial para filtro (formato: yyyy-MM-dd HH:mm:ss)")
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dataInicial,
+            
+            @Parameter(description = "Data final para filtro (formato: yyyy-MM-dd HH:mm:ss)")
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dataFinal,
+            
+            @Parameter(description = "Temperatura mínima para filtro")
+            @RequestParam(required = false) Double temperaturaMin,
+            
+            @Parameter(description = "Temperatura máxima para filtro")
+            @RequestParam(required = false) Double temperaturaMax,
+            
+            @Parameter(description = "Umidade mínima para filtro")
+            @RequestParam(required = false) Double umidadeMin,
+            
+            @Parameter(description = "Umidade máxima para filtro")
+            @RequestParam(required = false) Double umidadeMax,
+            
+            @Parameter(description = "Configuração de paginação e ordenação")
+            @PageableDefault(size = 10, sort = "timestamp", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable,
+            
+            Authentication authentication) {
+        
         Usuario usuario = (Usuario) authentication.getPrincipal();
-        List<Alerta> alertas = alertaService.findByUsuario(usuario);
-        List<AlertaResponseDTO> alertasDTO = alertas.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        Page<Alerta> alertas = alertaService.findByUsuarioWithFilters(
+            usuario, 
+            dataInicial, 
+            dataFinal, 
+            temperaturaMin, 
+            temperaturaMax, 
+            umidadeMin, 
+            umidadeMax, 
+            pageable
+        );
+        
+        Page<AlertaResponseDTO> alertasDTO = alertas.map(this::convertToDTO);
         return ResponseEntity.ok(alertasDTO);
     }
 

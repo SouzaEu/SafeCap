@@ -10,3 +10,38 @@
 .env
 .env.*
 !.env.example
+
+# Help file
+HELP.md
+
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# STS directories and project files
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA directories and project files
+.idea
+*.iws
+*.ipr
+
+# VS Code directories and project files
+.vscode/
+
+# Application properties
+application-dev.properties
+application-prod.properties
+
+# Logs
+*.log
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
