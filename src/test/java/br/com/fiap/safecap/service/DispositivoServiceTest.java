@@ -2,6 +2,7 @@ package br.com.fiap.safecap.service;
 
 import br.com.fiap.safecap.exception.BusinessRuleException;
 import br.com.fiap.safecap.model.Dispositivo;
+import br.com.fiap.safecap.model.Usuario;
 import br.com.fiap.safecap.repository.DispositivoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,15 +25,25 @@ public class DispositivoServiceTest {
     @InjectMocks
     private DispositivoService dispositivoService;
 
+    private Usuario usuario;
+
+    @BeforeEach
+    void setUp() {
+        usuario = new Usuario();
+        usuario.setId(1L);
+    }
+
     @Test
     public void deveLancarExcecaoQuandoNomeJaExiste() {
         Dispositivo novo = new Dispositivo();
         novo.setNome("Sensor Boné 01");
+        novo.setUsuario(usuario);
 
         Dispositivo existente = new Dispositivo();
         existente.setNome("Sensor Boné 01");
+        existente.setUsuario(usuario);
 
-        when(dispositivoRepository.findAll()).thenReturn(List.of(existente));
+        when(dispositivoRepository.findByUsuario(usuario)).thenReturn(List.of(existente));
 
         assertThrows(BusinessRuleException.class, () -> dispositivoService.save(novo));
     }
