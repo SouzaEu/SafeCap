@@ -22,15 +22,15 @@ public class AlertaServiceTest {
     @Test
     public void testSave() {
         Alerta alerta = new Alerta();
-        alerta.setTitulo("Teste");
-        alerta.setDescricao("Descrição do teste");
+        alerta.setTemperatura(25.5);
+        alerta.setUmidade(60.0);
 
         when(alertaRepository.save(any(Alerta.class))).thenReturn(alerta);
 
         Alerta saved = alertaService.save(alerta);
 
         verify(alertaRepository).save(alerta);
-        assertEquals("Teste", saved.getTitulo());
-        assertEquals("Descrição do teste", saved.getDescricao());
+        assertEquals(25.5, saved.getTemperatura());
+        assertEquals(60.0, saved.getUmidade());
     }
 }

@@ -1,90 +1,135 @@
+# SafeCap - Sistema de Monitoramento de Temperatura e Umidade
 
-# SafeCap API - Global Solution FIAP
+O SafeCap é um sistema inteligente de monitoramento de temperatura e umidade, desenvolvido para garantir a segurança e qualidade de produtos sensíveis a variações climáticas. Projeto desenvolvido para a Global Solution da FIAP.
 
-API REST em Spring Boot para monitoramento térmico inteligente via IoT. Projeto completo com autenticação, validação, tratamento de erros, testes e documentação.
+## 🚀 Tecnologias Utilizadas
 
-## ✅ Funcionalidades
+- Java 17
+- Spring Boot 3.2.3
+- Spring Security
+- JWT (JSON Web Tokens)
+- JPA/Hibernate
+- Oracle Database (FIAP)
+- Maven
 
-- Login e Registro com JWT
-- CRUD de Usuários, Dispositivos e Alertas
-- Validação por DTOs e regras de negócio em services
-- Filtros de temperatura e umidade com paginação
-- Swagger com exemplos e respostas de erro
-- Tratamento de erros com `ApiError` + exceções customizadas
-- Testes unitários e de integração completos
-- Logging estruturado com SLF4J e JSON
-- Perfis `dev`, `prod`, variáveis de ambiente e timeout de banco
-- Dockerfile + docker-compose + Oracle
+## 📋 Pré-requisitos
 
-## 🛡️ Segurança
+- Java 17 ou superior
+- Maven
 
-- JWT com expiração
-- Chave lida via variável de ambiente (`JWT_SECRET`)
-- Senhas criptografadas com `BCrypt`
-- Filtro de autenticação com JWT
-- CORS configurado
+## 🔧 Configuração do Ambiente
 
-## 💡 Validação
-
-- DTOs com `@Email`, `@Size`, `@Min`, `@Max`
-- Regras de negócio no `UsuarioService` e `DispositivoService`
-- Email e nome únicos validados com exceções
-
-## ⚠️ Tratamento de Erros
-
-- `@ControllerAdvice` com `ApiError`
-- Erros:
-  - `ValidationException` (400)
-  - `BusinessRuleException` (400)
-  - `ResourceNotFoundException` (404)
-  - `Exception` (500)
-
-## 🧪 Testes
-
-- `AlertaServiceTest` (valores críticos)
-- `AuthIntegrationTest` (registro, login, token)
-- `UsuarioServiceTest` (email duplicado)
-- `DispositivoServiceTest` (nome duplicado)
-
-## 🔍 Documentação
-
-Acesse:
-```
-http://localhost:8080/swagger-ui/index.html
+1. Clone o repositório
+```bash
+git clone https://github.com/SouzaEu/safecap.git
+cd safecap
 ```
 
-Exemplos incluídos nos endpoints de:
-- Login
-- Registro
-- Criação de alerta
+2. O arquivo `application.properties` já está configurado com as credenciais do banco de dados da FIAP
 
-## 🛠️ Execução com Docker
+3. Execute o projeto
+```bash
+mvn spring-boot:run
+```
+
+## 📦 Estrutura do Projeto
+
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── br/com/fiap/safecap/
+│   │       ├── controller/    # Endpoints REST
+│   │       ├── model/         # Entidades JPA
+│   │       ├── repository/    # Repositórios JPA
+│   │       ├── service/       # Lógica de negócios
+│   │       └── config/        # Configurações
+│   └── resources/
+│       └── application.properties
+```
+
+## 📝 Documentação e Testes
+
+### Documentação da API
+A documentação completa da API está disponível através do Swagger UI:
+```
+http://localhost:8080/swagger-ui.html
+```
+
+### Testes da API
+Na raiz do projeto, você encontrará o arquivo `comandos postman.txt` com todos os comandos HTTP para testar a API.
+
+## 📊 Funcionalidades
+
+### Dispositivos
+- Cadastro de dispositivos IoT
+- Listagem de dispositivos
+- Atualização de informações
+- Remoção de dispositivos
+
+### Alertas
+- Monitoramento de temperatura (-10°C a 80°C)
+- Monitoramento de umidade (0% a 100%)
+- Geração automática de alertas
+- Histórico de alertas
+
+## 🛠️ Desenvolvimento
 
 ```bash
-mvn clean package
-docker-compose up --build
+# Compilar o projeto
+mvn clean install
+
+# Executar os testes
+mvn test
+
+# Iniciar a aplicação
+mvn spring-boot:run
 ```
 
-## 🔓 Testes locais sem JWT
+## 🔄 Fluxo de Dados
 
-Ao executar com o perfil `dev`, a propriedade `security.disabled` fica ativada e
-todos os endpoints podem ser acessados sem token. Útil para testar via Swagger
-ou Postman em localhost.
+1. Usuário se registra no sistema
+2. Sistema criptografa a senha com BCrypt
+3. Usuário faz login e recebe token JWT
+4. Usuário cadastra dispositivos IoT
+5. Dispositivos enviam dados de temperatura e umidade
+6. Sistema gera alertas quando necessário
 
-## 📂 Estrutura
+## ⚠️ Limites e Validações
 
-- `controller/` — Endpoints
-- `dto/` — Validação
-- `model/` — Entidades
-- `service/` — Regra de negócio com logs
-- `exception/` — Exceções customizadas
-- `config/` — JWT, Swagger, CORS, Logs
-- `resources/` — application-dev/prod + logback
+- Temperatura: -10°C a 80°C
+- Umidade: 0% a 100%
+- Senha: mínimo 6 caracteres
+- Email: formato válido
 
-## 👥 Equipe
+## 🔒 Segurança
 
-- Thomaz Oliveira Vilas Boas Bartol – RM555323
-- Vinicius Souza Carvalho – RM556089
-- Gabriel Duarte – RM556972
+- Senhas criptografadas com BCrypt
+- Autenticação via JWT
+- Validação de tokens em cada requisição
+- Proteção contra SQL Injection
+- Validação de dados de entrada
+
+## 📈 Monitoramento
+
+O sistema permite:
+- Visualização em tempo real
+- Histórico de alertas
+- Relatórios personalizados
+- Dashboard com métricas
+
+## 🤝 Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
 
 
