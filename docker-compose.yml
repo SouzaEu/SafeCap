@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   safecap-api:
@@ -10,7 +11,10 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - JWT_SECRET=${JWT_SECRET}
-      - DB_URL=jdbc:oracle:thin:@oracle-db:1521:GLOBAL-SAFECAP
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521:GLOBAL-SAFECAP
+      - SPRING_DATASOURCE_USERNAME=RM556089
+      - SPRING_DATASOURCE_PASSWORD=290305
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=oracle.jdbc.OracleDriver
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
@@ -26,7 +30,7 @@ services:
       - ORACLE_PASSWORD=290305
       - APP_USER=RM556089
       - APP_USER_PASSWORD=290305
-      - ORACLE_SID=GLOBAL-SAFECAP 
+      - ORACLE_SID=GLOBAL-SAFECAP
     healthcheck:
       test: ["CMD", "ls"]
       interval: 30s
