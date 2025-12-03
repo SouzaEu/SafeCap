@@ -54,13 +54,13 @@ jobs:
     
     - name: Archive test results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: test-results
         path: target/surefire-reports/
     
     - name: Archive code coverage results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: code-coverage-report
         path: target/site/jacoco/
