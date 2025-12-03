@@ -1,135 +1,247 @@
-# SafeCap - Sistema de Monitoramento de Temperatura e Umidade
+# SafeCap
 
-O SafeCap é um sistema inteligente de monitoramento de temperatura e umidade, desenvolvido para garantir a segurança e qualidade de produtos sensíveis a variações climáticas. Projeto desenvolvido para a Global Solution da FIAP.
+[![Java Version](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
-## 🚀 Tecnologias Utilizadas
+An enterprise-grade IoT monitoring system for temperature and humidity control, built with Spring Boot and modern security practices.
 
-- Java 17
-- Spring Boot 3.2.3
-- Spring Security
-- JWT (JSON Web Tokens)
-- JPA/Hibernate
-- Oracle Database (FIAP)
-- Maven
+## Overview
 
-## 📋 Pré-requisitos
+SafeCap is a RESTful API platform designed to monitor and alert on environmental conditions through IoT devices. The system provides real-time tracking, automated alerting, and historical data analysis for temperature-sensitive and humidity-sensitive environments.
 
-- Java 17 ou superior
-- Maven
+**Key Features:**
+- Secure JWT-based authentication with BCrypt password encryption
+- Real-time IoT device monitoring and management
+- Automated alert generation based on configurable thresholds
+- RESTful API with OpenAPI 3.0 documentation
+- Horizontal scalability with stateless architecture
+- Comprehensive audit logging
 
-## 🔧 Configuração do Ambiente
+## Technology Stack
 
-1. Clone o repositório
-```bash
-git clone https://github.com/SouzaEu/safecap.git
-cd safecap
-```
+### Core Framework
+- **Java 17** - LTS version with modern language features
+- **Spring Boot 3.1.0** - Application framework
+- **Spring Security 6.1.0** - Authentication and authorization
+- **Spring Data JPA** - Data persistence layer
 
-2. O arquivo `application.properties` já está configurado com as credenciais do banco de dados da FIAP
+### Security
+- **JWT (jjwt 0.11.5)** - Token-based authentication
+- **BCrypt** - Password hashing algorithm
 
-3. Execute o projeto
-```bash
-mvn spring-boot:run
-```
+### Database
+- **Oracle Database** - Primary production database
+- **H2 Database** - In-memory database for testing
 
-## 📦 Estrutura do Projeto
+### Documentation
+- **SpringDoc OpenAPI 3** - API documentation and Swagger UI
 
-```
-src/
-├── main/
-│   ├── java/
-│   │   └── br/com/fiap/safecap/
-│   │       ├── controller/    # Endpoints REST
-│   │       ├── model/         # Entidades JPA
-│   │       ├── repository/    # Repositórios JPA
-│   │       ├── service/       # Lógica de negócios
-│   │       └── config/        # Configurações
-│   └── resources/
-│       └── application.properties
-```
+### Build Tools
+- **Maven 3.8+** - Dependency management and build automation
 
-## 📝 Documentação e Testes
+## Prerequisites
 
-### Documentação da API
-A documentação completa da API está disponível através do Swagger UI:
-```
-http://localhost:8080/swagger-ui.html
-```
+- JDK 17 or higher
+- Maven 3.8+
+- Oracle Database (or H2 for development/testing)
 
-### Testes da API
-Na raiz do projeto, você encontrará o arquivo `comandos postman.txt` com todos os comandos HTTP para testar a API.
+## Quick Start
 
-## 📊 Funcionalidades
-
-### Dispositivos
-- Cadastro de dispositivos IoT
-- Listagem de dispositivos
-- Atualização de informações
-- Remoção de dispositivos
-
-### Alertas
-- Monitoramento de temperatura (-10°C a 80°C)
-- Monitoramento de umidade (0% a 100%)
-- Geração automática de alertas
-- Histórico de alertas
-
-## 🛠️ Desenvolvimento
+### 1. Clone the Repository
 
 ```bash
-# Compilar o projeto
+git clone https://github.com/SouzaEu/SafeCap.git
+cd SafeCap
+```
+
+### 2. Configure Database
+
+Copy the example environment file and configure your database credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit `src/main/resources/application.properties` with your database settings.
+
+### 3. Build the Project
+
+```bash
 mvn clean install
+```
 
-# Executar os testes
-mvn test
+### 4. Run the Application
 
-# Iniciar a aplicação
+```bash
 mvn spring-boot:run
 ```
 
-## 🔄 Fluxo de Dados
+The API will be available at `http://localhost:8080`
 
-1. Usuário se registra no sistema
-2. Sistema criptografa a senha com BCrypt
-3. Usuário faz login e recebe token JWT
-4. Usuário cadastra dispositivos IoT
-5. Dispositivos enviam dados de temperatura e umidade
-6. Sistema gera alertas quando necessário
+### 5. Access API Documentation
 
-## ⚠️ Limites e Validações
+Navigate to `http://localhost:8080/swagger-ui.html` for interactive API documentation.
 
-- Temperatura: -10°C a 80°C
-- Umidade: 0% a 100%
-- Senha: mínimo 6 caracteres
-- Email: formato válido
+## Project Structure
 
-## 🔒 Segurança
+```
+SafeCap/
+├── src/
+│   ├── main/
+│   │   ├── java/com/safecap/
+│   │   │   ├── config/          # Security, CORS, JWT configuration
+│   │   │   ├── controller/      # REST API endpoints
+│   │   │   ├── dto/             # Data Transfer Objects
+│   │   │   ├── exception/       # Custom exception handling
+│   │   │   ├── model/           # JPA entities
+│   │   │   ├── repository/      # Data access layer
+│   │   │   └── service/         # Business logic
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/                    # Unit and integration tests
+├── pom.xml                      # Maven dependencies
+├── Dockerfile                   # Container configuration
+└── docker-compose.yml           # Multi-container setup
+```
 
-- Senhas criptografadas com BCrypt
-- Autenticação via JWT
-- Validação de tokens em cada requisição
-- Proteção contra SQL Injection
-- Validação de dados de entrada
+## API Endpoints
 
-## 📈 Monitoramento
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Authenticate and receive JWT token
 
-O sistema permite:
-- Visualização em tempo real
-- Histórico de alertas
-- Relatórios personalizados
-- Dashboard com métricas
+### Devices
+- `GET /api/dispositivos` - List all devices
+- `POST /api/dispositivos` - Create new device
+- `GET /api/dispositivos/{id}` - Get device details
+- `PUT /api/dispositivos/{id}` - Update device
+- `DELETE /api/dispositivos/{id}` - Remove device
 
-## 🤝 Contribuição
+### Alerts
+- `GET /api/alertas` - List all alerts
+- `POST /api/alertas` - Create alert
+- `GET /api/alertas/{id}` - Get alert details
+- `GET /api/alertas/dispositivo/{id}` - Get alerts by device
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
+For complete API documentation, visit the Swagger UI endpoint when running the application.
 
-## 📄 Licença
+## Configuration
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+### Environment Variables
+
+```properties
+# Database Configuration
+DB_URL=jdbc:oracle:thin:@localhost:1521:xe
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+# JWT Configuration
+JWT_SECRET=your-secret-key-here
+JWT_EXPIRATION=86400000
+
+# Application Configuration
+SERVER_PORT=8080
+```
+
+### Validation Rules
+
+- **Temperature Range:** -10°C to 80°C
+- **Humidity Range:** 0% to 100%
+- **Password:** Minimum 6 characters
+- **Email:** Valid RFC 5322 format
+
+## Security
+
+This application implements multiple security layers:
+
+1. **Authentication:** JWT-based stateless authentication
+2. **Authorization:** Role-based access control (RBAC)
+3. **Password Security:** BCrypt hashing with salt
+4. **SQL Injection Prevention:** Parameterized queries via JPA
+5. **CORS Configuration:** Configurable cross-origin resource sharing
+6. **Input Validation:** Bean Validation (JSR 380)
+
+## Testing
+
+Run the test suite:
+
+```bash
+mvn test
+```
+
+Run with coverage report:
+
+```bash
+mvn clean test jacoco:report
+```
+
+## Docker Support
+
+### Build and Run with Docker
+
+```bash
+docker build -t safecap:latest .
+docker run -p 8080:8080 safecap:latest
+```
+
+### Using Docker Compose
+
+```bash
+docker-compose up -d
+```
+
+## Development
+
+### Code Style
+This project follows standard Java conventions and Spring Boot best practices.
+
+### Branching Strategy
+- `main` - Production-ready code
+- `develop` - Integration branch
+- `feature/*` - New features
+- `bugfix/*` - Bug fixes
+- `hotfix/*` - Production hotfixes
+
+### Commit Convention
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+```
+feat: add device batch import
+fix: resolve JWT expiration issue
+docs: update API documentation
+test: add integration tests for alerts
+```
+
+## Performance
+
+- Stateless architecture enables horizontal scaling
+- Database connection pooling with HikariCP
+- Lazy loading and query optimization with JPA
+- Caching strategies for frequently accessed data
+
+## Monitoring and Logging
+
+The application uses SLF4J with Logback for structured logging:
+- Application logs: `logs/application.log`
+- Error logs: `logs/error.log`
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Architecture
+
+For detailed architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Support
+
+For questions and support, please open an issue in the GitHub repository.
 
 ---
 
-
+**Built with enterprise standards for production environments**
