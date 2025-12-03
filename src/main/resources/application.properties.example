@@ -22,4 +22,4 @@ server.port=${PORT:8080}
 
 # Logging Configuration
 logging.level.root=INFO
-logging.level.br.com.fiap.safecap=DEBUG 
+logging.level.com.safecap=DEBUG 
