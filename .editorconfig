@@ -1,0 +1,47 @@
+# EditorConfig helps maintain consistent coding styles
+# https://editorconfig.org
+
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Java files
+[*.java]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# XML files (pom.xml, etc.)
+[*.xml]
+indent_style = space
+indent_size = 4
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Properties files
+[*.properties]
+indent_style = space
+indent_size = 4
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2

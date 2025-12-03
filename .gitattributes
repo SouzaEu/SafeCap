@@ -1,0 +1,79 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Java sources
+*.java text diff=java
+*.kt text diff=kotlin
+*.groovy text diff=java
+*.scala text diff=java
+
+# XML
+*.xml text
+
+# YAML
+*.yaml text
+*.yml text
+
+# JSON
+*.json text
+
+# Markdown
+*.md text diff=markdown
+*.markdown text diff=markdown
+
+# Properties
+*.properties text
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Batch scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# SQL
+*.sql text
+
+# Documentation
+*.txt text
+*.adoc text
+*.textile text
+*.mustache text
+*.csv text
+*.tab text
+*.tsv text
+
+# Graphics
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+*.eps binary
+
+# Archives
+*.7z binary
+*.gz binary
+*.tar binary
+*.zip binary
+*.jar binary
+*.war binary
+
+# Fonts
+*.ttf binary
+*.eot binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Executables
+*.exe binary
+*.pyc binary
+
+# Build artifacts
+*.class linguist-generated=true
+target/ linguist-generated=true
+build/ linguist-generated=true

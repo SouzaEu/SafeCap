@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["maven"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchDatasources": ["maven"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["dependencies", "major-update"]
+    }
+  ],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "schedule": [
+    "before 10am on monday"
+  ],
+  "timezone": "America/Sao_Paulo",
+  "labels": ["dependencies"],
+  "reviewers": ["SouzaEu"],
+  "assignees": ["SouzaEu"],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "assignees": ["SouzaEu"]
+  },
+  "maven": {
+    "fileMatch": ["(^|/)pom\\.xml$"]
+  }
+}

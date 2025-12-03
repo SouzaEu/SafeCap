@@ -1,0 +1,74 @@
+# Production Configuration Example
+# Copy this file to application-prod.properties and update with your production values
+
+# Database Configuration (PostgreSQL recommended for production)
+spring.datasource.url=jdbc:postgresql://localhost:5432/safecap
+spring.datasource.username=safecap_user
+spring.datasource.password=STRONG_PASSWORD_HERE
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Connection Pool
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.idle-timeout=600000
+spring.datasource.hikari.max-lifetime=1800000
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
+spring.jpa.properties.hibernate.jdbc.batch_size=20
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+
+# Disable H2 Console
+spring.h2.console.enabled=false
+
+# JWT Configuration (MUST be changed for production)
+jwt.secret=CHANGE_THIS_TO_A_STRONG_256_BIT_SECRET_KEY_PRODUCTION
+jwt.expiration=3600000
+
+# Security Configuration
+security.disabled=false
+
+# Server Configuration
+server.port=8080
+server.compression.enabled=true
+server.compression.mime-types=text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+server.compression.min-response-size=1024
+server.error.include-message=never
+server.error.include-stacktrace=never
+server.error.include-exception=false
+
+# SSL/TLS Configuration (if using HTTPS)
+# server.ssl.enabled=true
+# server.ssl.key-store=classpath:keystore.p12
+# server.ssl.key-store-password=changeit
+# server.ssl.key-store-type=PKCS12
+# server.ssl.key-alias=tomcat
+
+# Logging Configuration
+logging.level.root=WARN
+logging.level.com.safecap=INFO
+logging.level.org.springframework.web=WARN
+logging.level.org.hibernate.SQL=WARN
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+logging.file.name=logs/safecap.log
+logging.file.max-size=10MB
+logging.file.max-history=30
+
+# Actuator Configuration (for monitoring)
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.health.show-details=when-authorized
+management.metrics.export.prometheus.enabled=true
+
+# Application Information
+spring.application.name=SafeCap
+info.app.name=SafeCap
+info.app.description=Enterprise IoT Monitoring System
+info.app.version=1.0.0
+info.app.encoding=@project.build.sourceEncoding@
+info.app.java.version=@java.version@
